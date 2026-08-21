@@ -21,9 +21,14 @@ app = Flask(__name__)
 # CONFIGURATION
 # ============================================================
 
-app.secret_key = "smartcanteen-secret-key-2026"
+app.secret_key = os.getenv(
+    "FLASK_SECRET_KEY",
+    "smartcanteen-secret-key-2026"
+)
 
-DATABASE = "smartcanteen.db"
+# Keep database inside the SmartCanteen project folder
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATABASE = os.path.join(BASE_DIR, "smartcanteen.db")
 
 
 # ============================================================
@@ -106,11 +111,17 @@ def get_customer_id():
 
 # ============================================================
 # DATABASE INITIALIZATION
+# IMPORTANT:
+# This function MUST run when Render starts Gunicorn.
 # ============================================================
 
 def init_db():
 
     conn = get_db_connection()
+
+    # ========================================================
+    # CREATE ORDERS TABLE
+    # ========================================================
 
     conn.execute("""
         CREATE TABLE IF NOT EXISTS orders (
@@ -328,6 +339,31 @@ def init_db():
 
     conn.close()
 
+    print("Database initialized successfully.")
+    print("Database location:", DATABASE)
+
+
+# ============================================================
+# IMPORTANT RENDER FIX
+# ============================================================
+#
+# Gunicorn runs:
+#
+#     gunicorn app:app
+#
+# Therefore:
+#
+#     if __name__ == "__main__":
+#
+# does NOT execute on Render.
+#
+# We initialize the database here so that the orders table
+# exists before any API request is received.
+#
+# ============================================================
+
+init_db()
+
 
 # ============================================================
 # STAFF LOGIN PROTECTION
@@ -424,7 +460,7 @@ def cart():
 
 
 # ============================================================
-# CUSTOMER ORDERS
+# CUSTOMER ORDERS PAGE
 # ============================================================
 
 @app.route("/orders")
@@ -971,8 +1007,16 @@ def create_order():
         )
 
 
+        # ====================================================
+        # DATABASE CONNECTION
+        # ====================================================
+
         conn = get_db_connection()
 
+
+        # ====================================================
+        # FIND NEXT ORDER NUMBER
+        # ====================================================
 
         last_order = conn.execute("""
             SELECT id
@@ -997,6 +1041,10 @@ def create_order():
             f"SC{next_id:04d}"
         )
 
+
+        # ====================================================
+        # INSERT ORDER
+        # ====================================================
 
         cursor = conn.execute("""
             INSERT INTO orders
@@ -2144,10 +2192,6 @@ def get_local_ip():
             hostname
         )
 
-        # Sometimes Windows returns
-        # 127.0.0.1, so use a UDP socket
-        # to find the actual LAN IP.
-
         if local_ip.startswith("127."):
 
             sock = socket.socket(
@@ -2182,11 +2226,12 @@ def get_local_ip():
 
 if __name__ == "__main__":
 
-    # Initialize database
+    # Database is already initialized above.
+    # This is kept here as an extra safety check for local use.
+
     init_db()
 
 
-    # Find computer's Wi-Fi/LAN IP
     local_ip = get_local_ip()
 
 
@@ -2198,7 +2243,7 @@ if __name__ == "__main__":
     print("")
     print("Server Status : RUNNING")
     print("")
-    
+
     print(
         "Computer URL  : "
         "http://127.0.0.1:5000/"
@@ -2233,7 +2278,7 @@ if __name__ == "__main__":
     print("==================================================")
 
     print(
-        f"Open this link on your phone:"
+        "Open this link on your phone:"
     )
 
     print(
@@ -2242,9 +2287,7 @@ if __name__ == "__main__":
 
     print("")
 
-    print(
-        "IMPORTANT:"
-    )
+    print("IMPORTANT:")
 
     print(
         "1. PC and phone must be connected"
