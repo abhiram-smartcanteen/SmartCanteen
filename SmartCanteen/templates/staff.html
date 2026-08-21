@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Staff Dashboard | SmartCanteen</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        header {
+            background: #0b1f3a;
+            color: white;
+            padding: 18px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        header h1 {
+            font-size: 24px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .staff-label {
+            background: #00c853;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        .dashboard-title {
+            margin-bottom: 25px;
+        }
+
+        .dashboard-title h2 {
+            font-size: 28px;
+            margin-bottom: 7px;
+        }
+
+        .dashboard-title p {
+            color: #667085;
+        }
+
+        .order-count {
+            display: inline-block;
+            margin-top: 12px;
+            background: #e8f1ff;
+            color: #0b1f3a;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        #ordersContainer {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(330px, 1fr));
+            gap: 22px;
+        }
+
+        .order-card {
+            background: white;
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow:
+                0 5px 18px
+                rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #0b1f3a;
+            transition: 0.2s;
+        }
+
+        .order-card:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 8px 24px
+                rgba(0, 0, 0, 0.11);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .order-id {
+            font-size: 21px;
+            font-weight: bold;
+            color: #0b1f3a;
+        }
+
+        .order-number {
+            font-size: 12px;
+            color: #98a2b3;
+            margin-top: 4px;
+        }
+
+        .status {
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .confirmed {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .preparing {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+        .ready {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .completed {
+            background: #e2e3e5;
+            color: #41464b;
+        }
+
+        .customer-box {
+            background: #f8fafc;
+            padding: 13px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+
+        .customer-box strong {
+            color: #344054;
+        }
+
+        /* PAYMENT */
+
+        .payment-box {
+            background: #eef7ff;
+            border: 1px solid #d7eaff;
+            padding: 13px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .payment-box strong {
+            color: #344054;
+        }
+
+        .payment-method {
+            font-weight: bold;
+            color: #0b1f3a;
+        }
+
+        .items-box {
+            background: #f8f9fa;
+            padding: 14px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .items-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #344054;
+        }
+
+        .items-content {
+            color: #475467;
+            line-height: 1.6;
+            word-break: break-word;
+        }
+
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .item-row:last-child {
+            border-bottom: none;
+        }
+
+        .total-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-top: 1px solid #e5e7eb;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 17px;
+        }
+
+        .total-label {
+            color: #667085;
+        }
+
+        .total-price {
+            font-size: 21px;
+            font-weight: bold;
+            color: #0b1f3a;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            border: none;
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+        }
+
+        button:disabled {
+            background: #d1d5db;
+            color: #6b7280;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .prepare-btn {
+            background: #0d6efd;
+            color: white;
+        }
+
+        .ready-btn {
+            background: #198754;
+            color: white;
+        }
+
+        .complete-btn {
+            background: #6c757d;
+            color: white;
+        }
+
+        .order-time {
+            color: #667085;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .empty {
+            background: white;
+            padding: 55px 25px;
+            text-align: center;
+            border-radius: 16px;
+            color: #667085;
+            grid-column: 1 / -1;
+            box-shadow:
+                0 5px 18px
+                rgba(0, 0, 0, 0.06);
+        }
+
+        .empty-icon {
+            font-size: 45px;
+            margin-bottom: 12px;
+        }
+
+        .empty h3 {
+            color: #344054;
+            margin-bottom: 8px;
+        }
+
+        .error-box {
+            background: #fff1f2;
+            color: #b42318;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 650px) {
+
+            header {
+                padding: 15px;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            header h1 {
+                text-align: center;
+                font-size: 21px;
+            }
+
+            .header-right {
+                justify-content: center;
+            }
+
+            .container {
+                width: 94%;
+                margin: 22px auto;
+            }
+
+            .dashboard-title h2 {
+                font-size: 24px;
+            }
+
+            #ordersContainer {
+                grid-template-columns: 1fr;
+            }
+
+            .order-card {
+                padding: 18px;
+            }
+
+            .order-header {
+                flex-direction: column;
+            }
+
+            .status {
+                align-self: flex-start;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h1>
+        🏪 KK Foods
+    </h1>
+
+    <div class="header-right">
+
+        <div class="staff-label">
+            STAFF DASHBOARD
+        </div>
+
+        <a
+            href="/logout"
+            class="logout-btn">
+
+            Logout
+
+        </a>
+
+    </div>
+
+</header>
+
+
+<div class="container">
+
+    <div class="dashboard-title">
+
+        <h2>
+            📋 Order Management
+        </h2>
+
+        <p>
+            Manage customer orders and update their status.
+        </p>
+
+        <div
+            class="order-count"
+            id="orderCount">
+
+            Loading orders...
+
+        </div>
+
+    </div>
+
+
+    <div id="ordersContainer">
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                ⏳
+            </div>
+
+            <h3>
+                Loading Orders
+            </h3>
+
+            <p>
+                Please wait...
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+// ======================================================
+// LOAD ORDERS
+// ======================================================
+
+async function loadOrders() {
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/staff/orders"
+            );
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Unable to fetch orders"
+            );
+
+        }
+
+        const orders =
+            await response.json();
+
+        displayOrders(orders);
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Load orders error:",
+            error
+        );
+
+        document.getElementById(
+            "ordersContainer"
+        ).innerHTML = `
+
+            <div class="error-box">
+
+                <h3>
+                    ❌ Unable to load orders
+                </h3>
+
+                <p>
+                    Please check the Flask server
+                    and refresh the page.
+                </p>
+
+            </div>
+
+        `;
+
+        document.getElementById(
+            "orderCount"
+        ).textContent =
+            "Unable to load orders";
+
+    }
+
+}
+
+
+// ======================================================
+// DISPLAY ORDERS
+// ======================================================
+
+function displayOrders(orders) {
+
+    const container =
+        document.getElementById(
+            "ordersContainer"
+        );
+
+    const count =
+        document.getElementById(
+            "orderCount"
+        );
+
+    if (
+        !orders ||
+        orders.length === 0
+    ) {
+
+        count.textContent =
+            "0 Orders";
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    📭
+                </div>
+
+                <h3>
+                    No Orders Yet
+                </h3>
+
+                <p>
+                    New customer orders will appear here.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    count.textContent =
+        `${orders.length} Order${orders.length > 1 ? "s" : ""}`;
+
+    container.innerHTML = "";
+
+
+    orders.forEach(
+        function(order) {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+            card.className =
+                "order-card";
+
+
+            // STATUS
+
+            const status =
+                order.status ||
+                "Confirmed";
+
+
+            const statusClass =
+                status.toLowerCase();
+
+
+            // ORDER ID
+
+            const orderId =
+                order.order_id ||
+                `SC${String(order.id).padStart(4, "0")}`;
+
+
+            // CUSTOMER
+
+            const customerName =
+                order.customer_name ||
+                "Guest";
+
+
+            // TIME
+
+            const orderTime =
+                order.created_at ||
+                "Recently";
+
+
+            // TOTAL
+
+            const total =
+                Number(order.total) || 0;
+
+
+            // PAYMENT
+
+            const paymentMethod =
+                order.payment_method ||
+                "Cash on Pickup";
+
+
+            // ITEMS
+
+            let itemsHTML = "";
+
+
+            try {
+
+                let items = [];
+
+
+                if (
+                    typeof order.items ===
+                    "string"
+                ) {
+
+                    items =
+                        JSON.parse(
+                            order.items
+                        );
+
+                }
+
+                else if (
+                    Array.isArray(
+                        order.items
+                    )
+                ) {
+
+                    items =
+                        order.items;
+
+                }
+
+
+                if (
+                    Array.isArray(items) &&
+                    items.length > 0
+                ) {
+
+                    items.forEach(
+                        function(item) {
+
+                            const name =
+                                item.name ||
+                                "Food Item";
+
+
+                            const quantity =
+                                Number(
+                                    item.quantity
+                                ) || 1;
+
+
+                            const price =
+                                Number(
+                                    item.price
+                                ) || 0;
+
+
+                            const itemTotal =
+                                price *
+                                quantity;
+
+
+                            itemsHTML += `
+
+                                <div class="item-row">
+
+                                    <span>
+
+                                        🍽️
+                                        ${escapeHTML(name)}
+                                        × ${quantity}
+
+                                    </span>
+
+                                    <strong>
+
+                                        ₹${itemTotal}
+
+                                    </strong>
+
+                                </div>
+
+                            `;
+
+                        }
+                    );
+
+                }
+
+                else {
+
+                    itemsHTML = `
+
+                        <div class="items-content">
+
+                            ${escapeHTML(
+                                order.items ||
+                                "Food items"
+                            )}
+
+                        </div>
+
+                    `;
+
+                }
+
+            }
+
+            catch (error) {
+
+                itemsHTML = `
+
+                    <div class="items-content">
+
+                        ${escapeHTML(
+                            order.items ||
+                            "Food items"
+                        )}
+
+                    </div>
+
+                `;
+
+            }
+
+
+            // ACTION BUTTONS
+
+            let buttons = "";
+
+
+            if (
+                status === "Confirmed"
+            ) {
+
+                buttons = `
+
+                    <button
+                        class="prepare-btn"
+                        onclick="
+                            updateStatus(
+                                ${order.id},
+                                'Preparing'
+                            )
+                        ">
+
+                        👨‍🍳 Start Preparing
+
+                    </button>
+
+                `;
+
+            }
+
+            else if (
+                status === "Preparing"
+            ) {
+
+                buttons = `
+
+                    <button
+                        class="ready-btn"
+                        onclick="
+                            updateStatus(
+                                ${order.id},
+                                'Ready'
+                            )
+                        ">
+
+                        ✅ Make Ready
+
+                    </button>
+
+                `;
+
+            }
+
+            else if (
+                status === "Ready"
+            ) {
+
+                buttons = `
+
+                    <button
+                        class="complete-btn"
+                        onclick="
+                            updateStatus(
+                                ${order.id},
+                                'Completed'
+                            )
+                        ">
+
+                        📦 Complete Order
+
+                    </button>
+
+                `;
+
+            }
+
+            else {
+
+                buttons = `
+
+                    <button disabled>
+
+                        ✓ Order Completed
+
+                    </button>
+
+                `;
+
+            }
+
+
+            // CARD
+
+            card.innerHTML = `
+
+                <div class="order-header">
+
+                    <div>
+
+                        <div class="order-id">
+
+                            Order #${escapeHTML(orderId)}
+
+                        </div>
+
+                        <div class="order-number">
+
+                            Database ID:
+                            #${order.id}
+
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="status ${statusClass}">
+
+                        ${escapeHTML(status)}
+
+                    </div>
+
+                </div>
+
+
+                <div class="customer-box">
+
+                    <strong>
+                        👤 Customer:
+                    </strong>
+
+                    ${escapeHTML(customerName)}
+
+                    <br>
+
+                    <strong>
+                        🕐 Order Time:
+                    </strong>
+
+                    ${escapeHTML(orderTime)}
+
+                </div>
+
+
+                <div class="payment-box">
+
+                    <strong>
+                        💳 Payment Method:
+                    </strong>
+
+                    <span class="payment-method">
+
+                        ${escapeHTML(paymentMethod)}
+
+                    </span>
+
+                </div>
+
+
+                <div class="items-box">
+
+                    <div class="items-title">
+
+                        🍔 Ordered Items
+
+                    </div>
+
+                    <div class="items-content">
+
+                        ${itemsHTML}
+
+                    </div>
+
+                </div>
+
+
+                <div class="total-box">
+
+                    <span class="total-label">
+
+                        💰 Total Amount
+
+                    </span>
+
+                    <span class="total-price">
+
+                        ₹${total.toFixed(2)}
+
+                    </span>
+
+                </div>
+
+
+                <div class="actions">
+
+                    ${buttons}
+
+                </div>
+
+            `;
+
+
+            container.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+// ======================================================
+// UPDATE STATUS
+// ======================================================
+
+async function updateStatus(
+    orderId,
+    newStatus
+) {
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/orders/${orderId}/status`,
+                {
+
+                    method: "PUT",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            status:
+                                newStatus
+
+                        })
+
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (
+            response.ok &&
+            result.success
+        ) {
+
+            await loadOrders();
+
+        }
+
+        else {
+
+            alert(
+                result.message ||
+                "Unable to update order."
+            );
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Status update error:",
+            error
+        );
+
+        alert(
+            "Server error. Please try again."
+        );
+
+    }
+
+}
+
+
+// ======================================================
+// ESCAPE HTML
+// ======================================================
+
+function escapeHTML(value) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.textContent =
+        value == null
+            ? ""
+            : String(value);
+
+    return div.innerHTML;
+
+}
+
+
+// ======================================================
+// AUTO REFRESH
+// ======================================================
+
+setInterval(
+    loadOrders,
+    5000
+);
+
+
+// ======================================================
+// INITIAL LOAD
+// ======================================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        loadOrders();
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

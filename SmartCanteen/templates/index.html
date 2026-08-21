@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>SmartCanteen | Aditya University</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+
+</head>
+
+<body>
+
+
+<!-- ==============================
+     NAVBAR
+============================== -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        🍴 <span>Smart</span>Canteen
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/">
+            Home
+        </a>
+
+        <a href="#canteens">
+            Canteens
+        </a>
+
+        <a href="#how">
+            How It Works
+        </a>
+
+        <a href="/cart" id="cart-link">
+            🛒 Cart
+        </a>
+
+        <a href="/orders">
+            📦 My Orders
+        </a>
+
+        <a href="/login" class="login-btn">
+            Login
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- ==============================
+     HERO
+============================== -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div class="badge">
+            🎓 Aditya University
+        </div>
+
+        <h1>
+            Skip the Queue.<br>
+            <span>Enjoy Your Food.</span>
+        </h1>
+
+        <p>
+            Order your favourite food from university canteens
+            before you reach the counter.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="/menu" class="primary-btn">
+                🍽️ Order Food
+            </a>
+
+            <a href="#how" class="secondary-btn">
+                How It Works →
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- LIVE STATUS -->
+
+    <div class="hero-card">
+
+        <div class="status-header">
+
+            <span>🟢</span>
+
+            <strong>
+                Live Canteen Status
+            </strong>
+
+        </div>
+
+
+        <div class="status-item">
+
+            <div>
+
+                <strong>
+                    Main Canteen
+                </strong>
+
+                <small>
+                    Currently serving
+                </small>
+
+            </div>
+
+            <span class="low">
+                Low Queue
+            </span>
+
+        </div>
+
+
+        <div class="status-item">
+
+            <div>
+
+                <strong>
+                    Food Court
+                </strong>
+
+                <small>
+                    Currently serving
+                </small>
+
+            </div>
+
+            <span class="medium">
+                Medium
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ==============================
+     CANTEENS
+============================== -->
+
+<section class="canteens" id="canteens">
+
+    <div class="section-heading">
+
+        <span>
+            EXPLORE
+        </span>
+
+        <h2>
+            Choose Your Canteen
+        </h2>
+
+        <p>
+            Select a canteen and explore today's menu.
+        </p>
+
+    </div>
+
+
+    <div class="canteen-grid">
+
+
+        <!-- MAIN CANTEEN -->
+
+        <div class="canteen-card">
+
+            <div class="canteen-image">
+                🍛
+            </div>
+
+            <div class="canteen-info">
+
+                <div class="canteen-title">
+
+                    <h3>
+                        Main Canteen
+                    </h3>
+
+                    <span class="open">
+                        OPEN
+                    </span>
+
+                </div>
+
+                <p>
+                    Biryani • Fried Rice • Parota
+                </p>
+
+                <div class="canteen-bottom">
+
+                    <span>
+                        🟢 Low Queue
+                    </span>
+
+                    <a href="/menu" class="menu-btn">
+                        View Menu →
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FOOD COURT -->
+
+        <div class="canteen-card">
+
+            <div class="canteen-image food-two">
+                🍚
+            </div>
+
+            <div class="canteen-info">
+
+                <div class="canteen-title">
+
+                    <h3>
+                        Food Court
+                    </h3>
+
+                    <span class="open">
+                        OPEN
+                    </span>
+
+                </div>
+
+                <p>
+                    More food options coming soon
+                </p>
+
+                <div class="canteen-bottom">
+
+                    <span>
+                        🟡 Medium Queue
+                    </span>
+
+                    <a href="/menu" class="menu-btn">
+                        View Menu →
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ==============================
+     MENU PREVIEW
+============================== -->
+
+<section class="menu-preview">
+
+    <div class="section-heading">
+
+        <span>
+            POPULAR TODAY
+        </span>
+
+        <h2>
+            Student Favourites
+        </h2>
+
+        <p>
+            Quickly add your favourite food to the cart.
+        </p>
+
+    </div>
+
+
+    <div class="food-grid">
+
+
+        <!-- CHICKEN BIRYANI -->
+
+        <div class="food-card">
+
+            <div class="food-icon">
+                🍗
+            </div>
+
+            <h3>
+                Chicken Biryani
+            </h3>
+
+            <p>
+                Main Canteen
+            </p>
+
+            <strong>
+                ₹160
+            </strong>
+
+            <button
+                type="button"
+                onclick="addFood('Chicken Biryani', 160)">
+
+                + Add
+
+            </button>
+
+        </div>
+
+
+        <!-- VEG BIRYANI -->
+
+        <div class="food-card">
+
+            <div class="food-icon">
+                🥗
+            </div>
+
+            <h3>
+                Veg Biryani
+            </h3>
+
+            <p>
+                Main Canteen
+            </p>
+
+            <strong>
+                ₹130
+            </strong>
+
+            <button
+                type="button"
+                onclick="addFood('Veg Biryani', 130)">
+
+                + Add
+
+            </button>
+
+        </div>
+
+
+        <!-- FRIED RICE -->
+
+        <div class="food-card">
+
+            <div class="food-icon">
+                🍚
+            </div>
+
+            <h3>
+                Fried Rice
+            </h3>
+
+            <p>
+                Main Canteen
+            </p>
+
+            <strong>
+                ₹100
+            </strong>
+
+            <button
+                type="button"
+                onclick="addFood('Fried Rice', 100)">
+
+                + Add
+
+            </button>
+
+        </div>
+
+
+        <!-- PAROTA -->
+
+        <div class="food-card">
+
+            <div class="food-icon">
+                🫓
+            </div>
+
+            <h3>
+                Parota
+            </h3>
+
+            <p>
+                Main Canteen
+            </p>
+
+            <strong>
+                ₹100
+            </strong>
+
+            <button
+                type="button"
+                onclick="addFood('Parota', 100)">
+
+                + Add
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ==============================
+     HOW IT WORKS
+============================== -->
+
+<section class="how" id="how">
+
+    <div class="section-heading">
+
+        <span>
+            SIMPLE PROCESS
+        </span>
+
+        <h2>
+            Order in 3 Simple Steps
+        </h2>
+
+    </div>
+
+
+    <div class="steps">
+
+
+        <div class="step">
+
+            <div>
+                1
+            </div>
+
+            <h3>
+                Choose
+            </h3>
+
+            <p>
+                Select your canteen and food.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div>
+                2
+            </div>
+
+            <h3>
+                Order
+            </h3>
+
+            <p>
+                Place your order before reaching.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div>
+                3
+            </div>
+
+            <h3>
+                Pickup
+            </h3>
+
+            <p>
+                Collect when your order is ready.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ==============================
+     FOOTER
+============================== -->
+
+<footer>
+
+    <h3>
+        🍴 SmartCanteen
+    </h3>
+
+    <p>
+        Smart food ordering for Aditya University.
+    </p>
+
+    <small>
+        University Food Ordering & Queue Management System
+    </small>
+
+</footer>
+
+
+</body>
+
+</html>

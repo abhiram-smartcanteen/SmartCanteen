@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Order Successful | SmartCanteen</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        🍴 <span>Smart</span>Canteen
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/">
+            Home
+        </a>
+
+        <a href="/menu">
+            KK Foods
+        </a>
+
+        <a href="/cart">
+            🛒 Cart
+        </a>
+
+        <a href="/orders">
+            📦 My Orders
+        </a>
+
+    </div>
+
+</nav>
+
+
+<section style="
+    min-height:75vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:40px 20px;
+">
+
+    <div style="
+        width:100%;
+        max-width:550px;
+        background:white;
+        padding:45px 30px;
+        border-radius:20px;
+        text-align:center;
+        box-shadow:0 8px 30px rgba(20,30,50,0.10);
+    ">
+
+        <div style="
+            font-size:70px;
+            margin-bottom:15px;
+        ">
+            ✅
+        </div>
+
+        <h1 style="
+            color:#18a558;
+            margin-bottom:15px;
+        ">
+            Order Placed Successfully!
+        </h1>
+
+        <p style="
+            color:#667085;
+            font-size:16px;
+            margin-bottom:25px;
+        ">
+            Your order has been received by KK Foods.
+        </p>
+
+
+        <div style="
+            background:#f8fafc;
+            padding:20px;
+            border-radius:12px;
+            margin-bottom:25px;
+        ">
+
+            <p style="
+                color:#667085;
+                margin-bottom:8px;
+            ">
+                Your Order ID
+            </p>
+
+            <h2 id="order-id">
+                Loading...
+            </h2>
+
+        </div>
+
+
+        <p style="
+            color:#667085;
+            margin-bottom:25px;
+        ">
+            🍽️ Estimated preparation time:
+            <strong>15–20 minutes</strong>
+        </p>
+
+
+        <div style="
+            display:flex;
+            gap:12px;
+            justify-content:center;
+            flex-wrap:wrap;
+        ">
+
+            <a href="/orders"
+               class="primary-btn"
+               style="
+                   text-decoration:none;
+                   display:inline-block;
+               ">
+
+                📦 Track My Order
+
+            </a>
+
+
+            <a href="/menu"
+               style="
+                   text-decoration:none;
+                   padding:13px 20px;
+                   border-radius:9px;
+                   border:1px solid #d0d5dd;
+                   color:#0b1f3a;
+                   font-weight:600;
+               ">
+
+                🍔 Order More
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        let orderId =
+            localStorage.getItem("lastOrderId");
+
+        let orderElement =
+            document.getElementById("order-id");
+
+        if (orderId) {
+
+            orderElement.innerText =
+                orderId;
+
+        } else {
+
+            orderElement.innerText =
+                "Order Confirmed";
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>

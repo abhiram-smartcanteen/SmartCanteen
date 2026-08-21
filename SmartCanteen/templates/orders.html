@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Orders | SmartCanteen</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .navbar {
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 16px 5%;
+        }
+
+        .logo {
+            white-space: nowrap;
+        }
+
+        .nav-links {
+
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+        }
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .orders-section {
+
+            width: 100%;
+            max-width: 950px;
+            margin: auto;
+            padding: 55px 5%;
+        }
+
+        .orders-heading {
+
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .orders-heading span {
+
+            color: #667085;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .orders-heading h1 {
+
+            margin: 10px 0;
+            font-size: clamp(32px, 5vw, 48px);
+        }
+
+        .orders-heading p {
+
+            color: #667085;
+            line-height: 1.6;
+        }
+
+        /* =====================================================
+           ORDER CARD
+        ===================================================== */
+
+        .order-card {
+
+            background: white;
+            padding: 28px;
+            margin-bottom: 25px;
+            border-radius: 18px;
+
+            box-shadow:
+                0 5px 20px
+                rgba(20,30,50,0.08);
+        }
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .order-header {
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .order-header h2 {
+
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .restaurant-name {
+
+            color: #667085;
+            margin-top: 6px;
+        }
+
+        .status-badge {
+
+            padding: 9px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* =====================================================
+           PAYMENT
+        ===================================================== */
+
+        .payment-box {
+
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+
+            padding: 12px 15px;
+
+            border-radius: 10px;
+
+            margin-bottom: 20px;
+
+            color: #075985;
+
+            font-weight: 600;
+        }
+
+        /* =====================================================
+           ITEMS
+        ===================================================== */
+
+        .items-title {
+            margin-bottom: 10px;
+        }
+
+        .item-row {
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 15px;
+
+            padding: 11px 0;
+
+            border-bottom: 1px solid #eee;
+        }
+
+        .item-name {
+            font-size: 15px;
+        }
+
+        .item-price {
+            white-space: nowrap;
+        }
+
+        /* =====================================================
+           SUMMARY
+        ===================================================== */
+
+        .order-summary {
+
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+
+        .summary-row {
+
+            display: flex;
+            justify-content: space-between;
+
+            margin-bottom: 10px;
+        }
+
+        .total-row {
+
+            display: flex;
+            justify-content: space-between;
+
+            font-size: 20px;
+
+            margin-top: 12px;
+        }
+
+        /* =====================================================
+           ORDER TIME
+        ===================================================== */
+
+        .order-time {
+
+            margin-top: 15px;
+
+            background: #f8fafc;
+
+            padding: 14px;
+
+            border-radius: 10px;
+
+            color: #475467;
+        }
+
+        /* =====================================================
+           TRACKING
+        ===================================================== */
+
+        .tracking-box {
+
+            margin-top: 25px;
+
+            padding: 20px;
+
+            background: #f8fafc;
+
+            border-radius: 14px;
+        }
+
+        .tracking-box h3 {
+
+            margin-top: 0;
+
+            margin-bottom: 25px;
+        }
+
+        .tracking {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            text-align: center;
+
+            gap: 5px;
+        }
+
+        .tracking-step {
+
+            flex: 1;
+
+            min-width: 0;
+        }
+
+        .step-circle {
+
+            width: 40px;
+            height: 40px;
+
+            margin: auto;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-weight: bold;
+        }
+
+        .step-label {
+
+            display: block;
+
+            margin-top: 8px;
+
+            font-size: 11px;
+
+            font-weight: 600;
+        }
+
+        .step-line {
+
+            flex: 0.3;
+
+            height: 3px;
+
+            margin-top: 19px;
+
+            background: #d1d5db;
+        }
+
+        .current-message {
+
+            margin-top: 22px;
+
+            padding: 14px;
+
+            background: #ecfdf3;
+
+            color: #15803d;
+
+            border-radius: 10px;
+
+            text-align: center;
+
+            font-weight: 600;
+        }
+
+        .tracking-note {
+
+            margin-top: 15px;
+
+            text-align: center;
+
+            color: #667085;
+
+            font-size: 13px;
+        }
+
+        /* =====================================================
+           NO ORDERS
+        ===================================================== */
+
+        #no-orders {
+
+            display: none;
+
+            text-align: center;
+
+            padding: 50px 20px;
+        }
+
+        .empty-icon {
+            font-size: 55px;
+        }
+
+        #no-orders h2 {
+            margin: 12px 0;
+        }
+
+        #no-orders p {
+
+            color: #667085;
+
+            margin-bottom: 25px;
+        }
+
+        .order-food-btn {
+
+            display: inline-block;
+
+            text-decoration: none;
+        }
+
+        /* =====================================================
+           ERROR
+        ===================================================== */
+
+        .error-box {
+
+            text-align: center;
+
+            padding: 35px 20px;
+
+            background: #fff7ed;
+
+            border-radius: 15px;
+
+            color: #9a3412;
+        }
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 650px) {
+
+            .navbar {
+
+                flex-direction: column;
+
+                align-items: stretch;
+
+                padding: 14px 16px;
+
+                gap: 12px;
+            }
+
+            .logo {
+
+                text-align: center;
+
+                font-size: 22px;
+            }
+
+            .nav-links {
+
+                display: grid;
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+
+                gap: 8px;
+
+                width: 100%;
+            }
+
+            .nav-links a {
+
+                min-height: 42px;
+
+                display: flex;
+
+                align-items: center;
+
+                justify-content: center;
+
+                padding: 10px 7px;
+
+                border-radius: 10px;
+
+                font-size: 14px;
+
+                text-align: center;
+            }
+
+            .orders-section {
+
+                padding: 38px 15px;
+            }
+
+            .orders-heading h1 {
+                font-size: 32px;
+            }
+
+            .order-card {
+
+                padding: 20px 16px;
+
+                border-radius: 16px;
+            }
+
+            .order-header {
+
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+            .order-header h2 {
+                font-size: 20px;
+            }
+
+            .status-badge {
+
+                font-size: 13px;
+
+                padding: 8px 13px;
+            }
+
+            .item-row {
+
+                align-items: flex-start;
+
+                font-size: 14px;
+            }
+
+            .tracking-box {
+
+                padding: 15px 8px;
+
+                overflow-x: hidden;
+            }
+
+            .tracking {
+                gap: 2px;
+            }
+
+            .step-circle {
+
+                width: 32px;
+
+                height: 32px;
+
+                font-size: 12px;
+            }
+
+            .step-line {
+
+                margin-top: 15px;
+
+                height: 2px;
+            }
+
+            .step-label {
+
+                font-size: 9px;
+
+                line-height: 1.3;
+            }
+
+            .current-message {
+
+                font-size: 14px;
+
+                line-height: 1.5;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        🍴 <span>Smart</span>Canteen
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="/">
+            🏠 Home
+        </a>
+
+        <a href="/menu">
+            🍽️ Menu
+        </a>
+
+        <a href="/cart"
+           id="cart-link">
+
+            🛒 Cart
+
+        </a>
+
+        <a href="/orders">
+
+            📦 My Orders
+
+        </a>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =====================================================
+     ORDERS SECTION
+===================================================== -->
+
+<section class="orders-section">
+
+
+    <div class="orders-heading">
+
+        <span>
+            ORDER HISTORY
+        </span>
+
+        <h1>
+            📦 My Orders
+        </h1>
+
+        <p>
+            Track your SmartCanteen orders in real time.
+        </p>
+
+    </div>
+
+
+    <div id="orders-container"></div>
+
+
+    <div id="no-orders">
+
+        <div class="empty-icon">
+            🛒
+        </div>
+
+        <h2>
+            No Orders Yet
+        </h2>
+
+        <p>
+            You haven't placed any orders yet.
+        </p>
+
+        <a href="/menu"
+           class="primary-btn order-food-btn">
+
+            🍽️ Order Food
+
+        </a>
+
+    </div>
+
+
+</section>
+
+
+
+<script>
+
+
+// =========================================================
+// LOAD CUSTOMER ORDERS
+// =========================================================
+
+async function loadOrders() {
+
+    const container =
+        document.getElementById(
+            "orders-container"
+        );
+
+
+    const noOrders =
+        document.getElementById(
+            "no-orders"
+        );
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/customer/orders",
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Failed to load orders"
+            );
+
+        }
+
+
+        const databaseOrders =
+            await response.json();
+
+
+        container.innerHTML = "";
+
+
+        // =================================================
+        // NO ORDERS
+        // =================================================
+
+        if (
+            !databaseOrders ||
+            databaseOrders.length === 0
+        ) {
+
+            noOrders.style.display =
+                "block";
+
+            return;
+
+        }
+
+
+        noOrders.style.display =
+            "none";
+
+
+        // =================================================
+        // DISPLAY ORDERS
+        // =================================================
+
+        databaseOrders.forEach(
+            function(order) {
+
+
+                const status =
+                    order.status ||
+                    "Confirmed";
+
+
+                // =========================================
+                // TRACKING STAGE
+                //
+                // 1 = Placed
+                // 2 = Confirmed
+                // 3 = Preparing
+                // 4 = Ready
+                // 5 = Completed
+                // =========================================
+
+                let stage = 2;
+
+
+                if (
+                    status === "Confirmed"
+                ) {
+
+                    stage = 2;
+
+                }
+
+                else if (
+                    status === "Preparing"
+                ) {
+
+                    stage = 3;
+
+                }
+
+                else if (
+                    status === "Ready"
+                ) {
+
+                    stage = 4;
+
+                }
+
+                else if (
+                    status === "Completed"
+                ) {
+
+                    stage = 5;
+
+                }
+
+
+                // =========================================
+                // ORDER ID
+                // =========================================
+
+                const orderId =
+                    order.order_id ||
+                    (
+                        "SC" +
+                        String(order.id)
+                            .padStart(4, "0")
+                    );
+
+
+                // =========================================
+                // ITEMS
+                // =========================================
+
+                let items = [];
+
+
+                try {
+
+                    if (
+                        typeof order.items ===
+                        "string"
+                    ) {
+
+                        items =
+                            JSON.parse(
+                                order.items
+                            );
+
+                    }
+
+                    else if (
+                        Array.isArray(
+                            order.items
+                        )
+                    ) {
+
+                        items =
+                            order.items;
+
+                    }
+
+                }
+
+                catch (error) {
+
+                    console.error(
+                        "Items parsing error:",
+                        error
+                    );
+
+                }
+
+
+                let itemsHTML = "";
+
+
+                if (
+                    Array.isArray(items) &&
+                    items.length > 0
+                ) {
+
+                    items.forEach(
+                        function(item) {
+
+
+                            const name =
+                                escapeHTML(
+                                    item.name ||
+                                    "Food Item"
+                                );
+
+
+                            const price =
+                                Number(
+                                    item.price
+                                ) || 0;
+
+
+                            const quantity =
+                                Number(
+                                    item.quantity
+                                ) || 1;
+
+
+                            const itemTotal =
+                                price *
+                                quantity;
+
+
+                            itemsHTML += `
+
+                                <div class="item-row">
+
+                                    <span class="item-name">
+
+                                        🍽️
+                                        ${name}
+                                        × ${quantity}
+
+                                    </span>
+
+                                    <strong class="item-price">
+
+                                        ₹${itemTotal}
+
+                                    </strong>
+
+                                </div>
+
+                            `;
+
+                        }
+                    );
+
+                }
+
+                else {
+
+                    itemsHTML = `
+
+                        <div class="item-row">
+
+                            <span>
+                                Food items
+                            </span>
+
+                            <strong>
+                                ₹${Number(order.total) || 0}
+                            </strong>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                // =========================================
+                // TOTAL
+                // =========================================
+
+                const total =
+                    Number(order.total) || 0;
+
+
+                let subtotal =
+                    total - 10;
+
+
+                if (subtotal < 0) {
+
+                    subtotal = total;
+
+                }
+
+
+                // =========================================
+                // PAYMENT METHOD
+                // =========================================
+
+                const paymentMethod =
+                    escapeHTML(
+                        order.payment_method ||
+                        "Cash on Pickup"
+                    );
+
+
+                // =========================================
+                // TRACKING COLORS
+                // =========================================
+
+                const activeColor =
+                    "#16a34a";
+
+
+                const inactiveColor =
+                    "#e5e7eb";
+
+
+                // =========================================
+                // TRACKING MESSAGE
+                // =========================================
+
+                let trackingMessage =
+                    "🕐 Your order has been placed.";
+
+
+                if (
+                    status === "Confirmed"
+                ) {
+
+                    trackingMessage =
+                        "✅ Your order is confirmed and being processed.";
+
+                }
+
+                else if (
+                    status === "Preparing"
+                ) {
+
+                    trackingMessage =
+                        "👨‍🍳 Your food is being prepared.";
+
+                }
+
+                else if (
+                    status === "Ready"
+                ) {
+
+                    trackingMessage =
+                        "🛍️ Your order is ready for pickup!";
+
+                }
+
+                else if (
+                    status === "Completed"
+                ) {
+
+                    trackingMessage =
+                        "🎉 Your order has been completed. Thank you!";
+
+                }
+
+
+                // =========================================
+                // STATUS COLORS
+                // =========================================
+
+                let badgeBackground =
+                    "#dcfce7";
+
+
+                let badgeColor =
+                    "#15803d";
+
+
+                if (
+                    status === "Preparing"
+                ) {
+
+                    badgeBackground =
+                        "#fef3c7";
+
+                    badgeColor =
+                        "#92400e";
+
+                }
+
+                else if (
+                    status === "Ready"
+                ) {
+
+                    badgeBackground =
+                        "#dbeafe";
+
+                    badgeColor =
+                        "#1d4ed8";
+
+                }
+
+                else if (
+                    status === "Completed"
+                ) {
+
+                    badgeBackground =
+                        "#e0e7ff";
+
+                    badgeColor =
+                        "#4338ca";
+
+                }
+
+
+                // =========================================
+                // ORDER TIME
+                // =========================================
+
+                const orderTime =
+                    escapeHTML(
+                        order.created_at ||
+                        "Recently"
+                    );
+
+
+                // =========================================
+                // CREATE CARD
+                // =========================================
+
+                const orderCard =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                orderCard.className =
+                    "order-card";
+
+
+                // =========================================
+                // CARD HTML
+                // =========================================
+
+                orderCard.innerHTML = `
+
+                    <div class="order-header">
+
+                        <div>
+
+                            <h2>
+                                Order #${escapeHTML(orderId)}
+                            </h2>
+
+                            <p class="restaurant-name">
+                                🏪 KK Foods
+                            </p>
+
+                        </div>
+
+
+                        <span
+                            class="status-badge"
+                            style="
+                                background:${badgeBackground};
+                                color:${badgeColor};
+                            ">
+
+                            ${status === "Completed"
+                                ? "✓ "
+                                : "● "
+                            }
+
+                            ${escapeHTML(status)}
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- PAYMENT -->
+
+                    <div class="payment-box">
+
+                        💳 Payment Method:
+
+                        <strong>
+                            ${paymentMethod}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- ITEMS -->
+
+                    <h3 class="items-title">
+
+                        🍽️ Ordered Items
+
+                    </h3>
+
+
+                    <div>
+
+                        ${itemsHTML}
+
+                    </div>
+
+
+                    <!-- SUMMARY -->
+
+                    <div class="order-summary">
+
+                        <div class="summary-row">
+
+                            <span>
+                                Subtotal
+                            </span>
+
+                            <strong>
+                                ₹${subtotal}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="summary-row">
+
+                            <span>
+                                Platform Fee
+                            </span>
+
+                            <strong>
+                                ₹10
+                            </strong>
+
+                        </div>
+
+
+                        <div class="total-row">
+
+                            <strong>
+                                Total
+                            </strong>
+
+                            <strong>
+                                ₹${total}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- TIME -->
+
+                    <div class="order-time">
+
+                        🕐 Order Time:
+
+                        <strong>
+                            ${orderTime}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- TRACKING -->
+
+                    <div class="tracking-box">
+
+                        <h3>
+                            📍 Order Tracking
+                        </h3>
+
+
+                        <div class="tracking">
+
+
+                            <!-- STEP 1 -->
+
+                            <div class="tracking-step">
+
+                                <div
+                                    class="step-circle"
+                                    style="
+                                        background:
+                                        ${stage >= 1
+                                            ? activeColor
+                                            : inactiveColor};
+
+                                        color:
+                                        ${stage >= 1
+                                            ? "white"
+                                            : "#6b7280"};
+                                    ">
+
+                                    ${stage >= 1
+                                        ? "✓"
+                                        : "1"}
+
+                                </div>
+
+
+                                <strong class="step-label">
+
+                                    Placed
+
+                                </strong>
+
+                            </div>
+
+
+                            <div
+                                class="step-line"
+                                style="
+                                    background:
+                                    ${stage >= 2
+                                        ? activeColor
+                                        : inactiveColor};
+                                ">
+                            </div>
+
+
+                            <!-- STEP 2 -->
+
+                            <div class="tracking-step">
+
+                                <div
+                                    class="step-circle"
+                                    style="
+                                        background:
+                                        ${stage >= 2
+                                            ? activeColor
+                                            : inactiveColor};
+
+                                        color:
+                                        ${stage >= 2
+                                            ? "white"
+                                            : "#6b7280"};
+                                    ">
+
+                                    ${stage >= 2
+                                        ? "✓"
+                                        : "2"}
+
+                                </div>
+
+
+                                <strong class="step-label">
+
+                                    Confirmed
+
+                                </strong>
+
+                            </div>
+
+
+                            <div
+                                class="step-line"
+                                style="
+                                    background:
+                                    ${stage >= 3
+                                        ? activeColor
+                                        : inactiveColor};
+                                ">
+                            </div>
+
+
+                            <!-- STEP 3 -->
+
+                            <div class="tracking-step">
+
+                                <div
+                                    class="step-circle"
+                                    style="
+                                        background:
+                                        ${stage >= 3
+                                            ? activeColor
+                                            : inactiveColor};
+
+                                        color:
+                                        ${stage >= 3
+                                            ? "white"
+                                            : "#6b7280"};
+                                    ">
+
+                                    ${stage >= 3
+                                        ? "✓"
+                                        : "3"}
+
+                                </div>
+
+
+                                <strong class="step-label">
+
+                                    Preparing
+
+                                </strong>
+
+                            </div>
+
+
+                            <div
+                                class="step-line"
+                                style="
+                                    background:
+                                    ${stage >= 4
+                                        ? activeColor
+                                        : inactiveColor};
+                                ">
+                            </div>
+
+
+                            <!-- STEP 4 -->
+
+                            <div class="tracking-step">
+
+                                <div
+                                    class="step-circle"
+                                    style="
+                                        background:
+                                        ${stage >= 4
+                                            ? activeColor
+                                            : inactiveColor};
+
+                                        color:
+                                        ${stage >= 4
+                                            ? "white"
+                                            : "#6b7280"};
+                                    ">
+
+                                    ${stage >= 4
+                                        ? "✓"
+                                        : "4"}
+
+                                </div>
+
+
+                                <strong class="step-label">
+
+                                    Ready
+
+                                </strong>
+
+                            </div>
+
+
+                            <div
+                                class="step-line"
+                                style="
+                                    background:
+                                    ${stage >= 5
+                                        ? activeColor
+                                        : inactiveColor};
+                                ">
+                            </div>
+
+
+                            <!-- STEP 5 -->
+
+                            <div class="tracking-step">
+
+                                <div
+                                    class="step-circle"
+                                    style="
+                                        background:
+                                        ${stage >= 5
+                                            ? activeColor
+                                            : inactiveColor};
+
+                                        color:
+                                        ${stage >= 5
+                                            ? "white"
+                                            : "#6b7280"};
+                                    ">
+
+                                    ${stage >= 5
+                                        ? "✓"
+                                        : "5"}
+
+                                </div>
+
+
+                                <strong class="step-label">
+
+                                    Completed
+
+                                </strong>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <!-- MESSAGE -->
+
+                        <div class="current-message">
+
+                            ${trackingMessage}
+
+                        </div>
+
+
+                        <p class="tracking-note">
+
+                            ℹ️ Order status is updated by the restaurant.
+
+                        </p>
+
+                    </div>
+
+                `;
+
+
+                container.appendChild(
+                    orderCard
+                );
+
+            }
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Load orders error:",
+            error
+        );
+
+
+        container.innerHTML = `
+
+            <div class="error-box">
+
+                <h3>
+                    ⚠️ Unable to load orders
+                </h3>
+
+                <p>
+                    Please refresh the page and try again.
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+// =========================================================
+// UPDATE CART COUNT
+// =========================================================
+
+function updateCartCount() {
+
+    const cart =
+        JSON.parse(
+            localStorage.getItem("cart")
+        ) || [];
+
+
+    let count = 0;
+
+
+    cart.forEach(
+        function(item) {
+
+            count +=
+                Number(
+                    item.quantity
+                ) || 0;
+
+        }
+    );
+
+
+    const cartLink =
+        document.getElementById(
+            "cart-link"
+        );
+
+
+    if (cartLink) {
+
+        cartLink.innerHTML =
+            count > 0
+                ? `🛒 Cart (${count})`
+                : "🛒 Cart";
+
+    }
+
+}
+
+
+// =========================================================
+// ESCAPE HTML
+// =========================================================
+
+function escapeHTML(value) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        value == null
+            ? ""
+            : String(value);
+
+
+    return div.innerHTML;
+
+}
+
+
+// =========================================================
+// AUTO REFRESH
+// =========================================================
+
+setInterval(
+    loadOrders,
+    5000
+);
+
+
+// =========================================================
+// PAGE LOAD
+// =========================================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        updateCartCount();
+
+        loadOrders();
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

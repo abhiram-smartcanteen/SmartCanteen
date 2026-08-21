@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Secrets
+.env
+.env.*
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# VS Code
+.vscode/
+
+# Unrelated folders/files
+SmartScreen/
+*.pptx
+*.pyi
+*.svg
+
+# Backup files
+*_backup.py
+*_backup.db
+smart_switch_list.json

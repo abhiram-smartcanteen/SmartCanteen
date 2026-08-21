@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SmartCanteen Login</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-box {
+            background: white;
+            padding: 35px;
+            width: 380px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .login-title {
+            text-align: center;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        .role-selection {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .role-option {
+            flex: 1;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 12px 5px;
+            text-align: center;
+            cursor: pointer;
+            background: #f8f9fa;
+            transition: 0.2s;
+        }
+
+        .role-option:hover {
+            border-color: #2563eb;
+        }
+
+        .role-option input {
+            width: auto;
+            margin: 0 5px 0 0;
+            cursor: pointer;
+        }
+
+        .role-option.selected {
+            border-color: #2563eb;
+            background: #eff6ff;
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            margin-bottom: 18px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-box">
+
+    <h1>🍴 SmartCanteen</h1>
+
+    <div class="login-title">
+        <strong>Login</strong>
+    </div>
+
+    <form method="POST" action="/login">
+
+        <!-- ==================================================
+             ROLE SELECTION
+             ================================================== -->
+
+        <div class="role-selection">
+
+            <!-- CUSTOMER -->
+
+            <label class="role-option selected">
+
+                <input
+                    type="radio"
+                    name="role"
+                    value="customer"
+                    checked
+                    onchange="updateRole(this)"
+                >
+
+                👤 Customer
+
+            </label>
+
+
+            <!-- STAFF -->
+
+            <label class="role-option">
+
+                <input
+                    type="radio"
+                    name="role"
+                    value="staff"
+                    onchange="updateRole(this)"
+                >
+
+                👨‍🍳 Staff
+
+            </label>
+
+
+            <!-- ADMIN -->
+
+            <label class="role-option">
+
+                <input
+                    type="radio"
+                    name="role"
+                    value="owner"
+                    onchange="updateRole(this)"
+                >
+
+                👨‍💼 Admin
+
+            </label>
+
+        </div>
+
+
+        <!-- ==================================================
+             USERNAME
+             ================================================== -->
+
+        <label for="username">
+            Username
+        </label>
+
+        <input
+            type="text"
+            name="username"
+            id="username"
+            placeholder="Enter customer username"
+            autocomplete="username"
+            required
+        >
+
+
+        <!-- ==================================================
+             PASSWORD
+             ================================================== -->
+
+        <label for="password">
+            Password
+        </label>
+
+        <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Enter customer password"
+            autocomplete="current-password"
+            required
+        >
+
+
+        <!-- ==================================================
+             LOGIN BUTTON
+             ================================================== -->
+
+        <button type="submit">
+            LOGIN
+        </button>
+
+    </form>
+
+
+    <!-- ======================================================
+         ERROR MESSAGE
+         ====================================================== -->
+
+    {% if error %}
+
+    <p class="error">
+        {{ error }}
+    </p>
+
+    {% endif %}
+
+</div>
+
+
+<script>
+
+function updateRole(selectedRadio) {
+
+    // Remove selected style from all role options
+
+    document
+        .querySelectorAll(".role-option")
+        .forEach(function(option) {
+
+            option.classList.remove("selected");
+
+        });
+
+
+    // Add selected style to clicked role
+
+    selectedRadio
+        .parentElement
+        .classList
+        .add("selected");
+
+
+    // Get username and password fields
+
+    const usernameInput =
+        document.getElementById("username");
+
+    const passwordInput =
+        document.getElementById("password");
+
+
+    // ======================================================
+    // CUSTOMER
+    // ======================================================
+
+    if (selectedRadio.value === "customer") {
+
+        usernameInput.placeholder =
+            "Enter customer username";
+
+        passwordInput.placeholder =
+            "Enter customer password";
+
+    }
+
+
+    // ======================================================
+    // STAFF
+    // ======================================================
+
+    else if (selectedRadio.value === "staff") {
+
+        usernameInput.placeholder =
+            "Enter staff username";
+
+        passwordInput.placeholder =
+            "Enter staff password";
+
+    }
+
+
+    // ======================================================
+    // ADMIN
+    // ======================================================
+
+    else if (selectedRadio.value === "owner") {
+
+        usernameInput.placeholder =
+            "Enter admin username";
+
+        passwordInput.placeholder =
+            "Enter admin password";
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
